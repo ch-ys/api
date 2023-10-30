@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.yupi.ApiGatewayApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 111.225 s <<< FAILURE! - in com.yupi.ApiGatewayApplicationTests
+contextLoads  Time elapsed: 0.006 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: java.lang.IllegalStateException: Failed to check the status of the service com.yupi.service.InnerUserService. No provider available for the service com.yupi.service.InnerUserService from the url consumer://192.168.1.107/com.yupi.service.InnerUserService?application=dubbo-springboot-demo-provider&background=false&dubbo=2.0.2&interface=com.yupi.service.InnerUserService&methods=getUser&pid=19020&register.ip=192.168.1.107&release=3.0.9&revision=0.0.1-SNAPSHOT&side=consumer&sticky=false&timestamp=1697357885595 to the consumer 192.168.1.107 use dubbo version 3.0.9
+

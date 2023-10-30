@@ -1,0 +1,8 @@
+com\yupi\model\entity\User.class
+com\yupi\model\entity\InterfaceInfo.class
+com\yupi\service\InnerInterfaceInfoService.class
+com\yupi\model\enums\InterfaceStatusEnum.class
+com\yupi\model\enums\PostReviewStatusEnum.class
+com\yupi\model\entity\UserInterfaceInfo.class
+com\yupi\service\InnerUserInterfaceInfoService.class
+com\yupi\service\InnerUserService.class

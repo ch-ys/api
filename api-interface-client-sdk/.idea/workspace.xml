@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="23626670-bd34-424e-97b7-e3d790cd634b" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\java\apache-maven-3.9.4\mvn_repo" />
+        <option name="mavenHome" value="$PROJECT_DIR$/../../apache-maven-3.9.4" />
+        <option name="userSettingsFile" value="D:\java\apache-maven-3.9.4\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="MavenRunner">
+    <option name="jreName" value="#JAVA_HOME" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2WRKTXYXKwdhSmMgpZtaDiLUX8k" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/java/ideajava/api-interface-client-sdk/src/main/java/com/yupi&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.runner&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\java\ideajava\api-interface-client-sdk\src\main\java\com\yupi" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="23626670-bd34-424e-97b7-e3d790cd634b" name="Changes" comment="" />
+      <created>1696689962387</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696689962387</updated>
+      <workItem from="1696689963429" duration="703000" />
+      <workItem from="1696726819723" duration="2087000" />
+      <workItem from="1696730961439" duration="733000" />
+      <workItem from="1696739224613" duration="21000" />
+      <workItem from="1696745204751" duration="5656000" />
+      <workItem from="1696760492842" duration="1828000" />
+      <workItem from="1696774379495" duration="179000" />
+      <workItem from="1696817184349" duration="535000" />
+      <workItem from="1696818541445" duration="2399000" />
+      <workItem from="1696828079411" duration="2580000" />
+      <workItem from="1696837161061" duration="986000" />
+      <workItem from="1696838499715" duration="577000" />
+      <workItem from="1696841089319" duration="4022000" />
+      <workItem from="1696904646658" duration="1836000" />
+      <workItem from="1696907275387" duration="122000" />
+      <workItem from="1696918095107" duration="5902000" />
+      <workItem from="1696944330252" duration="1425000" />
+      <workItem from="1696948365174" duration="942000" />
+      <workItem from="1696989835269" duration="66000" />
+      <workItem from="1696997178945" duration="1274000" />
+      <workItem from="1697282069212" duration="216000" />
+      <workItem from="1697628063292" duration="1057000" />
+      <workItem from="1697633244928" duration="1256000" />
+      <workItem from="1697635609638" duration="683000" />
+      <workItem from="1697636802861" duration="1216000" />
+      <workItem from="1697638924907" duration="603000" />
+      <workItem from="1697640373534" duration="813000" />
+      <workItem from="1697700272730" duration="1009000" />
+      <workItem from="1698159447417" duration="794000" />
+      <workItem from="1698206043702" duration="633000" />
+      <workItem from="1698652105959" duration="718000" />
+      <workItem from="1698655872995" duration="1381000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
