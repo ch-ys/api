@@ -6,13 +6,7 @@
 
 ## 技术选型
 
-### 前端
 
-- React 18
-- Ant Design Pro 5.x 脚手架
-- Ant Design & Procomponents 组件库
-- Umi 4 前端框架
-- OpenAPI 前端代码生成
 
 
 
