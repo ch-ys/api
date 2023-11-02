@@ -1,4 +1,5 @@
 com\yupi\model\entity\User.class
+com\yupi\untils\CacheConstant.class
 com\yupi\model\entity\InterfaceInfo.class
 com\yupi\service\InnerInterfaceInfoService.class
 com\yupi\model\enums\InterfaceStatusEnum.class

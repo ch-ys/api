@@ -36,8 +36,10 @@
             <artifactId>hutool-all</artifactId>
             <version>5.8.18</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
-
-
 
 </project>

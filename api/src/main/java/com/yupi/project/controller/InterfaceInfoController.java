@@ -129,7 +129,9 @@ public class InterfaceInfoController {
         if (!oldInterfaceInfo.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
-        boolean result = interfaceinfoService.updateById(interfaceinfo);
+//        boolean result = interfaceinfoService.updateById(interfaceinfo);
+        boolean result = interfaceinfoService.updateByIdDeleteCache(interfaceinfo);
+
         return ResultUtils.success(result);
     }
 
@@ -140,11 +142,14 @@ public class InterfaceInfoController {
      * @return
      */
     @GetMapping("/get")
-    public BaseResponse<InterfaceInfo> getInterfaceInfoById(long id) {
+    public BaseResponse<InterfaceInfo> getInterfaceInfoById(long id) throws InterruptedException {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        InterfaceInfo interfaceinfo = interfaceinfoService.getById(id);
+//        InterfaceInfo interfaceinfo = interfaceinfoService.getById(id);
+//        InterfaceInfo interfaceinfo = interfaceinfoService.cacheGetById(id);
+//        InterfaceInfo interfaceinfo = interfaceinfoService.lockCacheGetById(id);
+        InterfaceInfo interfaceinfo = interfaceinfoService.logicCacheGetById(id);
         return ResultUtils.success(interfaceinfo);
     }
 
@@ -194,7 +199,8 @@ public class InterfaceInfoController {
         QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>(interfaceinfoQuery);
         queryWrapper.like(StringUtils.isNotBlank(description), "description", description);
         queryWrapper.orderBy(StringUtils.isNotBlank(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
-        Page<InterfaceInfo> interfaceinfoPage = interfaceinfoService.page(new Page<>(current, size), queryWrapper);
+//        Page<InterfaceInfo> interfaceinfoPage = interfaceinfoService.page(new Page<InterfaceInfo>(current, size), queryWrapper);
+        Page<InterfaceInfo> interfaceinfoPage = interfaceinfoService.cachePage(new Page<>(current, size), queryWrapper);
         return ResultUtils.success(interfaceinfoPage);
     }
 
@@ -235,7 +241,8 @@ public class InterfaceInfoController {
         interfaceInfo.setId(id);
         interfaceInfo.setStatus(InterfaceStatusEnum.ONLINE.getValue());
 
-        boolean result = interfaceinfoService.updateById(interfaceInfo);
+//        boolean result = interfaceinfoService.updateById(interfaceInfo);
+        boolean result = interfaceinfoService.updateByIdDeleteCache(interfaceInfo);
         return ResultUtils.success(result);
     }
 
@@ -264,7 +271,8 @@ public class InterfaceInfoController {
         interfaceInfo.setId(id);
         interfaceInfo.setStatus(InterfaceStatusEnum.OFFLINE.getValue());
 
-        boolean result = interfaceinfoService.updateById(interfaceInfo);
+//        boolean result = interfaceinfoService.updateById(interfaceInfo);
+        boolean result = interfaceinfoService.updateByIdDeleteCache(interfaceInfo);
         return ResultUtils.success(result);
     }
 
@@ -294,34 +302,6 @@ public class InterfaceInfoController {
         String nameByJson = apiClient.getNameByJson(userRequestParams,"http://localhost:8090/api/name/user");
         return ResultUtils.success(nameByJson);
     }
-
-//    @PostMapping("/add/independence")
-//    public BaseResponse<Long> addIndependenceInterfaceInfo(@RequestBody InterfaceInfoAddRequest interfaceinfoAddRequest,
-//                                                           HttpServletRequest request,
-//                                                           Object requestParams) {
-//        if (interfaceinfoAddRequest == null) {
-//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-//        }
-//        InterfaceInfo interfaceinfo = new InterfaceInfo();
-//        BeanUtils.copyProperties(interfaceinfoAddRequest, interfaceinfo);
-//        // 校验
-//        interfaceinfoService.validInterfaceInfo(interfaceinfo, true);
-//        // 校验第三方接口有效性
-//        String url = interfaceinfo.getUrl();
-//        String nameByJson = apiClient.getNameByJson(requestParams,url);
-//        if (nameByJson == "调用失败"){
-//            throw new BusinessException(ErrorCode.OPERATION_ERROR,nameByJson);
-//        }
-//        User loginUser = userService.getLoginUser(request);
-//        interfaceinfo.setUserId(loginUser.getId());
-//        boolean result = interfaceinfoService.save(interfaceinfo);
-//        if (!result) {
-//            throw new BusinessException(ErrorCode.OPERATION_ERROR);
-//        }
-//        long newInterfaceInfoId = interfaceinfo.getId();
-//        return ResultUtils.success(newInterfaceInfoId);
-//    }
-    
 }
 
 

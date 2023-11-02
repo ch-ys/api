@@ -7,12 +7,18 @@ import cn.hutool.http.HttpStatus;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.yupi.pojo.ClientUser;
+import com.yupi.untils.RedisUntils;
 import com.yupi.untils.SignUntils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 第三方调用客户端
@@ -22,38 +28,39 @@ public class apiClient {
 
     private String accessKey;
     private String secretKey;
-
+//    private StringRedisTemplate stringRedisTemplate = new RedisUntils().getStringRedisTemplate();
+//    private static final String AK= "AK-SK";
 
     public apiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
     }
 
-    public String getNameByGet(String name){
-        HashMap<String, Object> paramMap = new HashMap<>();
-        paramMap.put("name", name);
+//    public String getNameByGet(String name){
+//        HashMap<String, Object> paramMap = new HashMap<>();
+//        paramMap.put("name", name);
+//
+//        String result = HttpUtil.get("localhost:8123/api/name/", paramMap);
+//        return result;
+//    }
+//
+//    public String getNameByPost(String name){
+//        HashMap<String, Object> paramMap = new HashMap<>();
+//        paramMap.put("name", name);
+//
+//        String result= HttpUtil.post("localhost:8123/api/name/", paramMap);
+//        return result;
+//    }
 
-        String result = HttpUtil.get("localhost:8123/api/name/", paramMap);
-        return result;
-    }
-
-    public String getNameByPost(String name){
-        HashMap<String, Object> paramMap = new HashMap<>();
-        paramMap.put("name", name);
-
-        String result= HttpUtil.post("localhost:8123/api/name/", paramMap);
-        return result;
-    }
-
+    @Transactional
     public Map<String,String> putHeader(String body){
         HashMap<String, String> headerKey = new HashMap<>();
 
         headerKey.put("accessKey",accessKey);
         headerKey.put("body",body);
         headerKey.put("timestamp",String.valueOf(System.currentTimeMillis() / 1000));
-        headerKey.put("nonce", RandomUtil.randomNumbers(4));
+        headerKey.put("nonce",RandomUtil.randomNumbers(4));
         headerKey.put("sign", SignUntils.Sign(body,secretKey));
-
         return headerKey;
     }
 

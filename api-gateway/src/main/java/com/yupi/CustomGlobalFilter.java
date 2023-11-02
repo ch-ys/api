@@ -17,16 +17,19 @@ import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,12 +40,16 @@ import java.util.List;
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
     private static final List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1");
     private static final String HOST = "http://localhost:8123";
+    private static final String AK= "AK-SK";
     @DubboReference
     private InnerUserInterfaceInfoService innerUserInterfaceInfoService;
     @DubboReference
     private InnerUserService innerUserService;
     @DubboReference
     private InnerInterfaceInfoService interfaceInfoService;
+
+//    @Resource
+//    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -84,16 +91,18 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             log.info("用户名或密码错误");
             return handleNoAUTH(response);
         }
-        if (Long.parseLong(nonce) > 10000L){
+        //验证随机数防止重放
+        if (nonce.length() > 5L){
             log.info("信息错误");
             return handleNoAUTH(response);
         }
-        final long FIVE_MINS = 60 * 5L;
+        final long FIVE_MINS = 60L;
         Long time = System.currentTimeMillis() / 1000 - Long.parseLong(timestamp);
         if (time > FIVE_MINS ){
             log.info("时间过期");
             return handleNoAUTH(response);
         }
+
         String secretKey = user.getSecretKey();
         String valid = SignUntils.Sign(body,secretKey);
         if (!valid.equals(sign)){
@@ -121,22 +130,40 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         long interfaceInfoId = interfaceInfo.getId();
         long userId = user.getId();
         Integer leftNum = null;
-        try {
-            leftNum = innerUserInterfaceInfoService.getUserInterfaceInfoByIds(interfaceInfoId,userId).getLeftNum();
-        } catch (Exception e) {
-            log.info("getUserInterfaceInfoByIds error", e);
-        }
-        if (leftNum == null) {
-            log.info("未查询到次数记录");
-            return handleNoAUTH(response);
-        }
-        if (leftNum < 1 ){
-            log.info("剩余次数不够");
-            return handleNoAUTH(response);
-        }
+        synchronized(this) {
+            try {
+                leftNum = innerUserInterfaceInfoService.getUserInterfaceInfoByIds(interfaceInfoId,userId).getLeftNum();
+            } catch (Exception e) {
+                log.info("getUserInterfaceInfoByIds error", e);
+            }
+            if (leftNum == null) {
+                log.info("未查询到次数记录");
+                return handleNoAUTH(response);
+            }
+            if (leftNum < 1 ){
+                log.info("剩余次数不够");
+                return handleNoAUTH(response);
+            }
 
-        //6路由转发 //7响应日志 //8成功返回 调用次数+1 //9失败标准返回
-        return handleResponse(exchange,chain,interfaceInfoId,userId);
+            //6路由转发 //7响应日志 //8成功返回 调用次数+1 //9失败标准返回
+            return handleResponse(exchange,chain,interfaceInfoId,userId);
+        }
+//        try {
+//            leftNum = innerUserInterfaceInfoService.getUserInterfaceInfoByIds(interfaceInfoId,userId).getLeftNum();
+//        } catch (Exception e) {
+//            log.info("getUserInterfaceInfoByIds error", e);
+//        }
+//        if (leftNum == null) {
+//            log.info("未查询到次数记录");
+//            return handleNoAUTH(response);
+//        }
+//        if (leftNum < 1 ){
+//            log.info("剩余次数不够");
+//            return handleNoAUTH(response);
+//        }
+//
+//        //6路由转发 //7响应日志 //8成功返回 调用次数+1 //9失败标准返回
+//        return handleResponse(exchange,chain,interfaceInfoId,userId);
     }
 
     public Mono<Void> handleResponse(ServerWebExchange exchange, GatewayFilterChain chain, long interfaceInfoId, long userId) {
