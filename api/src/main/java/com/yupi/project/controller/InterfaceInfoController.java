@@ -22,6 +22,7 @@ import com.yupi.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -33,15 +34,14 @@ import java.util.List;
 @RequestMapping("/interfaceInfo")
 @Slf4j
 public class InterfaceInfoController {
-
     @Resource
     private InterfaceInfoService interfaceinfoService;
-
     @Resource
     private UserService userService;
-
     @Resource
     private apiClient apiClient;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     // region 增删改查
 
@@ -298,7 +298,7 @@ public class InterfaceInfoController {
         User loginUser = userService.getLoginUser(request);
         String accessKey = loginUser.getAccessKey();
         String secretKey = loginUser.getSecretKey();
-        com.yupi.client.apiClient apiClient = new apiClient(accessKey,secretKey);
+        com.yupi.client.apiClient apiClient = new apiClient(accessKey,secretKey,stringRedisTemplate);
         String nameByJson = apiClient.getNameByJson(userRequestParams,"http://localhost:8090/api/name/user");
         return ResultUtils.success(nameByJson);
     }

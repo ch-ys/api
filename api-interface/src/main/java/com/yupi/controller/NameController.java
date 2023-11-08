@@ -21,9 +21,6 @@ public class NameController {
     public String getNameByJson(@RequestBody ClientUser clientUser, HttpServletRequest request){
         String Tag = null;
         Tag = request.getHeader("Tag");
-        if (Tag == null){
-            throw new RuntimeException("无权限");
-        }
         if (!Tag.equals("api")){
             throw new RuntimeException("无权限");
         }

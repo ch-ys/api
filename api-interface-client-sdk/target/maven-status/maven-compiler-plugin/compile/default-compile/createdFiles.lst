@@ -1,6 +1,5 @@
 com\yupi\pojo\ClientUser.class
 com\yupi\client\apiClient.class
 com\yupi\untils\SignUntils.class
-com\yupi\untils\RedisUntils.class
 com\yupi\ApiClientConfig.class
 META-INF\spring-configuration-metadata.json

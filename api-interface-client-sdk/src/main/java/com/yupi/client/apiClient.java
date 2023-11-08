@@ -4,16 +4,12 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpStatus;
-import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.yupi.pojo.ClientUser;
-import com.yupi.untils.RedisUntils;
 import com.yupi.untils.SignUntils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -24,12 +20,13 @@ import java.util.concurrent.TimeUnit;
  * 第三方调用客户端
  */
 @Slf4j
+@AllArgsConstructor
 public class apiClient {
 
     private String accessKey;
     private String secretKey;
-//    private StringRedisTemplate stringRedisTemplate = new RedisUntils().getStringRedisTemplate();
-//    private static final String AK= "AK-SK";
+    private StringRedisTemplate stringRedisTemplate;
+    private static final String AK= "AK-SK";
 
     public apiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
@@ -59,7 +56,9 @@ public class apiClient {
         headerKey.put("accessKey",accessKey);
         headerKey.put("body",body);
         headerKey.put("timestamp",String.valueOf(System.currentTimeMillis() / 1000));
-        headerKey.put("nonce",RandomUtil.randomNumbers(4));
+        String nonce = RandomUtil.randomNumbers(4);
+        headerKey.put("nonce",nonce);
+        stringRedisTemplate.opsForValue().set(AK +":" + accessKey,nonce,5L, TimeUnit.MINUTES);
         headerKey.put("sign", SignUntils.Sign(body,secretKey));
         return headerKey;
     }
@@ -75,7 +74,7 @@ public class apiClient {
         String result = null;
         if (status != HttpStatus.HTTP_OK){
             log.info("状态码:" + status);
-            throw new RuntimeException();
+            throw new RuntimeException("访问失败:"+status);
         }
         result = response.body();
         log.info("调用成功");

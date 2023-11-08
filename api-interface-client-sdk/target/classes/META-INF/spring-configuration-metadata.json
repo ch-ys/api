@@ -16,6 +16,11 @@
       "name": "api.client.secret-key",
       "type": "java.lang.String",
       "sourceType": "com.yupi.ApiClientConfig"
+    },
+    {
+      "name": "api.client.string-redis-template",
+      "type": "org.springframework.data.redis.core.StringRedisTemplate",
+      "sourceType": "com.yupi.ApiClientConfig"
     }
   ],
   "hints": []

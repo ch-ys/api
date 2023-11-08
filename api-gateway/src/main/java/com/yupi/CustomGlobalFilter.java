@@ -39,7 +39,7 @@ import java.util.List;
 @Component
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
     private static final List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1");
-    private static final String HOST = "http://localhost:8123";
+    private static final String HOST = "http://localhost:8090";
     private static final String AK= "AK-SK";
     @DubboReference
     private InnerUserInterfaceInfoService innerUserInterfaceInfoService;
@@ -47,9 +47,9 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     private InnerUserService innerUserService;
     @DubboReference
     private InnerInterfaceInfoService interfaceInfoService;
-
-//    @Resource
-//    private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+    private static final long FIVE_MINS =5 * 60L;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -91,24 +91,30 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             log.info("用户名或密码错误");
             return handleNoAUTH(response);
         }
+
         //验证随机数防止重放
-        if (nonce.length() > 5L){
-            log.info("信息错误");
+//        if (nonce.length() > 5L){
+//            log.info("信息错误");
+//            return handleNoAUTH(response);
+//        }
+        String key = AK + ":"+accessKey;
+        String redisNonce = stringRedisTemplate.opsForValue().get(key);
+        if (!redisNonce.equals(nonce)){
+            log.info("随机数错误错误");
             return handleNoAUTH(response);
         }
-        final long FIVE_MINS = 60L;
         Long time = System.currentTimeMillis() / 1000 - Long.parseLong(timestamp);
         if (time > FIVE_MINS ){
             log.info("时间过期");
             return handleNoAUTH(response);
         }
-
         String secretKey = user.getSecretKey();
         String valid = SignUntils.Sign(body,secretKey);
         if (!valid.equals(sign)){
             log.info("签名错误");
             return handleNoAUTH(response);
         }
+        stringRedisTemplate.delete(key);
 
         //4判断接口状态
         InterfaceInfo interfaceInfo = null;
@@ -119,10 +125,12 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             log.info("getInterfaceInfo error", e);
         }
         if (interfaceInfo == null){
+            log.info("接口不存在");
             return handleInvokeError(response);
         }
         //判断是否上线
         if (interfaceInfo.getStatus() == InterfaceStatusEnum.OFFLINE.getValue()){
+            log.info("接口未上线");
             return handleInvokeError(response);
         }
 
