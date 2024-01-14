@@ -138,40 +138,23 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         long interfaceInfoId = interfaceInfo.getId();
         long userId = user.getId();
         Integer leftNum = null;
-        synchronized(this) {
-            try {
-                leftNum = innerUserInterfaceInfoService.getUserInterfaceInfoByIds(interfaceInfoId,userId).getLeftNum();
-            } catch (Exception e) {
-                log.info("getUserInterfaceInfoByIds error", e);
-            }
-            if (leftNum == null) {
-                log.info("未查询到次数记录");
-                return handleNoAUTH(response);
-            }
-            if (leftNum < 1 ){
-                log.info("剩余次数不够");
-                return handleNoAUTH(response);
-            }
-
-            //6路由转发 //7响应日志 //8成功返回 调用次数+1 //9失败标准返回
-            return handleResponse(exchange,chain,interfaceInfoId,userId);
-        }
-//        try {
-//            leftNum = innerUserInterfaceInfoService.getUserInterfaceInfoByIds(interfaceInfoId,userId).getLeftNum();
-//        } catch (Exception e) {
-//            log.info("getUserInterfaceInfoByIds error", e);
-//        }
-//        if (leftNum == null) {
-//            log.info("未查询到次数记录");
-//            return handleNoAUTH(response);
-//        }
-//        if (leftNum < 1 ){
-//            log.info("剩余次数不够");
-//            return handleNoAUTH(response);
-//        }
 //
-//        //6路由转发 //7响应日志 //8成功返回 调用次数+1 //9失败标准返回
-//        return handleResponse(exchange,chain,interfaceInfoId,userId);
+        try {
+            leftNum = innerUserInterfaceInfoService.getUserInterfaceInfoByIds(interfaceInfoId,userId).getLeftNum();
+        } catch (Exception e) {
+            log.info("getUserInterfaceInfoByIds error", e);
+        }
+        if (leftNum == null) {
+            log.info("未查询到次数记录");
+            return handleNoAUTH(response);
+        }
+        if (leftNum < 1 ){
+            log.info("剩余次数不够");
+            return handleNoAUTH(response);
+        }
+
+        //6路由转发 //7响应日志 //8成功返回 调用次数+1 //9失败标准返回
+        return handleResponse(exchange,chain,interfaceInfoId,userId);
     }
 
     public Mono<Void> handleResponse(ServerWebExchange exchange, GatewayFilterChain chain, long interfaceInfoId, long userId) {
@@ -216,7 +199,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                         } else {
                             // 8. 调用失败，返回一个规范的错误码
                             log.error("<--- {} 响应code异常", getStatusCode());
-                        }
+                    }
                         return super.writeWith(body);
                     }
                 };
